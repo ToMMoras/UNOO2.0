@@ -18,7 +18,10 @@
     <ClInclude Include="carte.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Paquet.h">
+    <ClInclude Include="paquet.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="entree.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
@@ -26,7 +29,13 @@
     <ClCompile Include="carte.c">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Paquet.c">
+    <ClCompile Include="paquet.c">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="test_nombre_de_carte.c">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="entree.c">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

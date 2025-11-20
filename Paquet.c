@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "paquet.h"
-#include "utils.h"
+#include "entree.h"
 
 void initialiser_paquet(Paquet* p) {
     // TODO : remplir le paquet avec toutes les cartes

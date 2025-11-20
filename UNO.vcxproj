@@ -124,11 +124,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="carte.h" />
-    <ClInclude Include="Paquet.h" />
+    <ClInclude Include="paquet.h" />
+    <ClInclude Include="entree.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="carte.c" />
-    <ClCompile Include="Paquet.c" />
+    <ClCompile Include="paquet.c" />
+    <ClCompile Include="test_nombre_de_carte.c" />
+    <ClCompile Include="entree.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
