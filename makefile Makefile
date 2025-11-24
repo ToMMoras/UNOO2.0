@@ -1,0 +1,35 @@
+# Makefile simple pour le projet UNO
+TARGET := uno
+
+CC := gcc
+CXX := g++
+CFLAGS := -std=c11 -Wall -Wextra -O2 -g -I.
+CXXFLAGS := -std=c++14 -Wall -Wextra -O2 -g -I.
+
+SRCS := $(wildcard *.c)
+CPPSRCS := $(wildcard *.cpp)
+OBJS := $(SRCS:.c=.o) $(CPPSRCS:.cpp=.o)
+
+LINKER := $(CC)
+ifneq ($(CPPSRCS),)
+	LINKER := $(CXX)
+endif
+
+.PHONY: all clean run
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(LINKER) $(OBJS) -o $@
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+clean:
+	rm -f $(OBJS) $(TARGET)
+
+run: all
+	./$(TARGET)

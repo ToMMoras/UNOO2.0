@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -124,14 +124,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="carte.h" />
+    <ClInclude Include="effets.h" />
+    <ClInclude Include="jeu.h" />
+    <ClInclude Include="joueur.h" />
     <ClInclude Include="paquet.h" />
     <ClInclude Include="entree.h" />
+    <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="carte.c" />
+    <ClCompile Include="effets.c" />
+    <ClCompile Include="jeu.c" />
+    <ClCompile Include="joueur.c" />
+    <ClCompile Include="main.c" />
     <ClCompile Include="paquet.c" />
-    <ClCompile Include="test_nombre_de_carte.c" />
     <ClCompile Include="entree.c" />
+    <ClCompile Include="utils.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="makefile Makefile" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

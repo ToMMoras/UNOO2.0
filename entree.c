@@ -1,15 +1,21 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
+#include <string.h>
 #include "entree.h"
 
-int nombre_aleatoire(int min, int max)
-{
-    return rand() % (max - min + 1) + min;
+int demander_entier(int min, int max) {
+    int x; int ok = 0;
+    while (!ok) {
+        printf("> ");
+        if (scanf("%d", &x) == 1 && x >= min && x <= max) ok = 1;
+        else printf("Entrée invalide\n");
+        while (getchar() != '\n'); 
+    }
+    return x;
 }
 
-void vider_buffer()
-{
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);
+void demander_chaine(char* buffer, int taille) {
+    fgets(buffer, taille, stdin);
+    buffer[strcspn(buffer, "\n")] = '\0';
 }

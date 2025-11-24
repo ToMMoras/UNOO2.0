@@ -1,80 +1,59 @@
-﻿#include <stdio.h>
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
 #include <string.h>
 #include "joueur.h"
-#include "entree.h"   // demander_entier, demander_chaine
+#include "entree.h"
+#include "carte.h"
 
-// Initialise un joueur
 void initialiser_joueur(Joueur* j, const char* nom, int estHumain)
 {
-    strncpy(j->nom, nom, 19);
-    j->nom[19] = '\0';
-
+    strncpy(j->nom, nom, sizeof j->nom - 1);
+    j->nom[sizeof j->nom - 1] = '\0';
     j->nb_cartes = 0;
     j->estHumain = estHumain;
 }
 
-// Ajoute une carte à la main
-void ajouter_carte_main(Joueur* j, Carte c)
-{
-    j->main[j->nb_cartes] = c;
-    j->nb_cartes++;
+void ajouter_carte_main(Joueur* j, Carte c) {
+    if (j->nb_cartes < (int)(sizeof j->main / sizeof j->main[0])) {
+        j->main[j->nb_cartes++] = c;
+    } else {
+        // main pleine — ignorer ou loguer
+        printf("Attention : main pleine pour %s, carte ignorée.\n", j->nom);
+    }
 }
 
-// Retire une carte selon l’index
-void retirer_carte_main(Joueur* j, int index)
-{
-    if (index < 0 || index >= j->nb_cartes)
-        return;
-
+void retirer_carte_main(Joueur* j, int index) {
+    if (index < 0 || index >= j->nb_cartes) return;
     for (int i = index; i < j->nb_cartes - 1; i++)
         j->main[i] = j->main[i + 1];
-
     j->nb_cartes--;
 }
 
-// Affiche les cartes du joueur
-void afficher_main(const Joueur* j)
-{
+void afficher_main(const Joueur* j) {
     printf("\nMain de %s (%d cartes) :\n", j->nom, j->nb_cartes);
     for (int i = 0; i < j->nb_cartes; i++) {
-        printf(" [%d] ", i);
-        afficher_carte(j->main[i]);   // ← doit exister dans carte.c
+        printf("[%d] ", i);
+        afficher_carte(j->main[i]);
     }
-    printf("\n");
 }
 
-// Choix d'une carte à jouer
-int choisir_carte(Joueur* j, Carte carte_dessus)
-{
+int choisir_carte(Joueur* j, Carte carte_dessus) {
     afficher_main(j);
-
     if (j->estHumain) {
-        printf("\nChoisissez une carte à jouer ou -1 pour piocher : ");
-        int choix = demander_entier(-1, j->nb_cartes - 1);
-        return choix;
+        printf("Choisissez une carte (-1 pour piocher) : ");
+        return demander_entier(-1, j->nb_cartes - 1);
     }
-
-    // IA simple : jouer la première carte compatible
     for (int i = 0; i < j->nb_cartes; i++) {
-        if (carte_peut_etre_jouee(j->main[i], carte_dessus)) { // doit exister dans carte.c
+        if (carte_peut_etre_jouee(j->main[i], carte_dessus))
             return i;
-        }
     }
-
-    return -1; // IA pioche
+    return -1;
 }
 
-// Vérifie si le joueur a crié UNO
-int verifier_uno(Joueur* j, const char* saisie)
-{
-    if (j->nb_cartes == 1 && strcmp(saisie, "UNO") == 0)
-        return 1;
-
-    return 0;
+int verifier_uno(Joueur* j, const char* saisie) {
+    return j->nb_cartes == 1 && strcmp(saisie, "UNO") == 0;
 }
 
-// Vérifie si le joueur n’a plus de cartes
-int main_vide(Joueur* j)
-{
+int main_vide(Joueur* j) {
     return j->nb_cartes == 0;
 }
