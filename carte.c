@@ -5,17 +5,30 @@
 
 void afficher_carte(Carte c)
 {
+    // Types conformes à l'adaptation du sujet : "+2", "+4", "JJ", "RV", "PS" ou valeur
     switch (c.type)
     {
-    case TYPE_NORMAL:   printf("%d ", c.valeur); break;
-    case TYPE_PLUS2:    printf("+2 "); break;
-    case TYPE_PLUS4:    printf("+4 "); break;
-    case TYPE_JOKER:    printf("JOKER "); break;
-    case TYPE_INVERSION:printf("INV "); break;
-    case TYPE_PASSER:   printf("PASS "); break;
+    case TYPE_NORMAL:
+        printf("%d ", c.valeur);
+        break;
+    case TYPE_PLUS2:
+        printf("+2 ");
+        break;
+    case TYPE_PLUS4:
+        printf("+4 ");
+        break;
+    case TYPE_JOKER:
+        printf("JJ ");
+        break;
+    case TYPE_INVERSION:
+        printf("RV ");
+        break;
+    case TYPE_PASSER:
+        printf("PS ");
+        break;
     }
 
-    char* col = "?";
+    const char* col = "?";
     switch (c.couleur)
     {
     case ROUGE: col = "R"; break;

@@ -18,7 +18,7 @@ void ajouter_carte_main(Joueur* j, Carte c) {
         j->main[j->nb_cartes++] = c;
     } else {
         // main pleine — ignorer ou loguer
-        printf("Attention : main pleine pour %s, carte ignoree.\n", j->nom);
+        printf("Attention : main pleine pour %s, carte ignorée.\n", j->nom);
     }
 }
 

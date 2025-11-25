@@ -9,7 +9,7 @@ int demander_entier(int min, int max) {
     while (!ok) {
         printf("> ");
         if (scanf("%d", &x) == 1 && x >= min && x <= max) ok = 1;
-        else printf("Entree invalide\n");
+        else printf("Entrée invalide\n");
         while (getchar() != '\n'); 
     }
     return x;

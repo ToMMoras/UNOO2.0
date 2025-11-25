@@ -65,7 +65,7 @@ void effet_inversion(Partie* p) { p->sens *= -1; printf("Sens inversé !\n"); }
 
 void effet_passer(Partie* p) {
     int cible = joueur_suivant(p);
-    printf("%s est passe !\n", p->joueurs[cible].nom);
+    printf("%s est passé !\n", p->joueurs[cible].nom);
     p->joueur_actuel = cible;
     passer_au_suivant(p);
 }

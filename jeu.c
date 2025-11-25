@@ -69,7 +69,7 @@ void passer_au_suivant(Partie* p)
 
 void afficher_plateau(const Partie* p)
 {
-    printf("\n=== Plateau ===\n");
+    printf("\n Plateau \n");
     printf("Carte dessus : ");
     afficher_carte(p->carte_dessus);
     printf("Pioche: %d cartes | Défausse: %d cartes\n", p->pioche.nb_cartes, p->defausse.nb_cartes);
@@ -81,7 +81,7 @@ void afficher_plateau(const Partie* p)
         }
     }
     printf("Joueur actuel : %s\n", p->joueurs[p->joueur_actuel].nom);
-    printf("===============\n");
+    printf("\n");
 }
 
 void boucle_jeu(Partie* p)
@@ -112,14 +112,23 @@ void boucle_jeu(Partie* p)
 
                 int effet = appliquer_effet(p, p->joueur_actuel, p->carte_dessus);
 
-                if (j->estHumain && j->nb_cartes == 1) {
-                    printf("Vous avez une carte ! Tapez 'UNO' : ");
+                // Gestion UNO conforme au sujet : penalité si "UNO" faux ou oubli
+                if (j->estHumain) {
+                    printf("Tapez 'UNO' si approprié (ou appuyez sur entrée) : ");
                     char buffer[10];
                     demander_chaine(buffer, 10);
-                    if (!verifier_uno(j, buffer)) {
-                        printf("Vous n'avez pas dit UNO correctement ! Vous piochez 2 cartes.\n");
-                        ajouter_carte_main(j, tirer_carte(&p->pioche));
-                        ajouter_carte_main(j, tirer_carte(&p->pioche));
+                    if (strcmp(buffer, "UNO") == 0) {
+                        if (j->nb_cartes != 1) {
+                            printf("Faux UNO ! Vous piochez 2 cartes.\n");
+                            ajouter_carte_main(j, tirer_carte(&p->pioche));
+                            ajouter_carte_main(j, tirer_carte(&p->pioche));
+                        } // sinon tout va bien
+                    } else {
+                        if (j->nb_cartes == 1) {
+                            printf("Vous avez oublié de crier UNO ! Vous piochez 2 cartes.\n");
+                            ajouter_carte_main(j, tirer_carte(&p->pioche));
+                            ajouter_carte_main(j, tirer_carte(&p->pioche));
+                        }
                     }
                 }
 
