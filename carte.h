@@ -23,4 +23,9 @@ typedef enum {
 typedef struct {
     TypeCarte type;   // type de la carte
     Couleur couleur;  // couleur de la carte
-    int valeur;       // vale
+    int valeur;       // valeur pour les cartes normales (0-9), -1 pour autres
+} Carte;
+
+void afficher_carte(Carte c);
+
+int carte_peut_etre_jouee(Carte c, Carte dessus);

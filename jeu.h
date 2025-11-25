@@ -36,3 +36,6 @@ void passer_au_suivant(Partie* p);
 
 // Affiche l'état complet du plateau : cartes, joueurs et pioche/défausse
 void afficher_plateau(const Partie* p);
+
+/* Tire une carte en gérant le re-remplissage depuis la défausse si nécessaire */
+Carte tirer_carte_partie(Partie* p);

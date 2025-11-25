@@ -18,36 +18,36 @@ void afficher_carte(Carte c)
         printf("+4 ");           // carte +4
         break;
     case TYPE_JOKER:
-        printf("JJ ");           // Joker
+        printf("Joker ");        // Joker
         break;
     case TYPE_INVERSION:
-        printf("RV ");           // Inversion
+        printf("Inversion ");    // Inversion
         break;
     case TYPE_PASSER:
-        printf("PS ");           // Passer
+        printf("Passer ");       // Passer
         break;
     }
 
-    // Affiche la couleur de la carte : R, J, B, V, N
+    // Affiche la couleur de la carte : Rouge, Jaune, Bleu, Vert, Noir
     const char* col = "?";
     switch (c.couleur)
     {
-    case ROUGE: col = "R"; break;
-    case JAUNE: col = "J"; break;
-    case BLEU:  col = "B"; break;
-    case VERT:  col = "V"; break;
-    case NOIR:  col = "N"; break; // pour les jokers et +4
+    case ROUGE: col = "Rouge"; break;
+    case JAUNE: col = "Jaune"; break;
+    case BLEU:  col = "Bleu"; break;
+    case VERT:  col = "Vert"; break;
+    case NOIR:  col = "Noir"; break; // pour les jokers et +4
     }
 
     printf("%s\n", col); // affiche le type + couleur
 }
 
-// Vérifie si une carte peut être jouée sur la carte du dessus
+// Verifie si une carte peut etre jouee sur la carte du dessus
 int carte_peut_etre_jouee(Carte c, Carte dessus)
 {
-    if (c.couleur == dessus.couleur) return 1; // même couleur
-    if (c.type == dessus.type) return 1;       // même type (ex: +2 sur +2)
+    if (c.couleur == dessus.couleur) return 1; // meme couleur
+    if (c.type == dessus.type) return 1;       // meme type (ex: +2 sur +2)
     if (c.type == TYPE_JOKER || c.type == TYPE_PLUS4) return 1; // Joker ou +4 jouable toujours
-    if (c.type == TYPE_NORMAL && dessus.type == TYPE_NORMAL && c.valeur == dessus.valeur) return 1; // même valeur
+    if (c.type == TYPE_NORMAL && dessus.type == TYPE_NORMAL && c.valeur == dessus.valeur) return 1; // meme valeur
     return 0; // sinon non jouable
 }
