@@ -1,0 +1,103 @@
+DEBUT PROGRAMME
+
+    INITIALISER générateur aléatoire
+
+    // ---- CREATION DE LA PARTIE ----
+    CREER paquet complet de 108 cartes
+    MELANGER le paquet
+
+    POUR chaque joueur (humain, bot)
+        CREER structure joueur
+        INITIALISER nom
+        INITIALISER compteur de cartes = 0
+    FIN POUR
+
+    // ---- DISTRIBUTION ----
+    POUR i = 1 à 7
+        DONNER 1 carte au joueur humain
+        DONNER 1 carte au bot
+    FIN POUR
+
+    PRENDRE la première carte du paquet
+    LA METTRE sur la défausse
+    DEFINIR cette carte comme carte_du_dessus
+
+    joueur_actuel = HUMAIN
+    sens = +1
+
+    // ---- BOUCLE DE JEU ----
+    TANT QUE personne n’a gagné FAIRE
+
+        AFFICHER état du plateau :
+            - carte du dessus
+            - nombre de cartes du bot
+            - main complète du joueur humain
+
+        SI joueur_actuel est HUMAIN ALORS
+            AFFICHER la main avec indices [1..N]
+            DEMANDER choix utilisateur :
+                - numéro de carte à jouer
+                - OU "0" pour piocher
+                - APRES le coup : attendre saisie pour UNO éventuel
+
+            SI le joueur a choisi 0 (piocher) ALORS
+                PIOCHER une carte
+                SI cette carte peut être jouée
+                    DEMANDER au joueur s'il veut la jouer
+                    SI oui -> JOUER la carte
+                FIN SI
+            SINON
+                VERIFIER si la carte choisie est jouable
+                SI NON -> redemander
+                SINON -> JOUER LA CARTE
+
+            SI joueur a maintenant 1 carte
+                DEMANDER saisie UNO
+                SI mauvais UNO -> joueur pioche 2 cartes
+            FIN SI
+
+        SINON   // TOUR DU BOT
+            RECHERCHER dans sa main une carte jouable
+            SI une carte existe
+                JOUER cette carte
+                SI cette carte est un +4
+                    BOT annonce une couleur aléatoire
+                    BOT peut appeler bluff
+                FIN SI
+            SINON
+                BOT pioche 1 carte
+                SI cette carte peut être jouée
+                    BOT la joue immédiatement
+            FIN SI
+        FIN SI
+
+        // ---- GESTION DES EFFETS ----
+        SELON le type de la carte jouée
+            CAS "+2":
+                joueur_suivant pioche 2 cartes
+            CAS "+4":
+                joueur_suivant pioche 4 cartes
+                BOT peut appeler bluff
+            CAS "PASSER":
+                sauter le joueur suivant
+            CAS "INVERSION":
+                inverser le sens du jeu
+            CAS "JOKER":
+                joueur choisit une couleur
+        FIN SELON
+
+        // ---- PASSAGE AU JOUEUR SUIVANT ----
+        SI effet "PASSER" n’a PAS sauté le tour ALORS
+            joueur_actuel = joueur_suivant(sens)
+        FIN SI
+
+    FIN TANT QUE
+
+    // ---- FIN DE LA PARTIE ----
+    SI joueur humain n’a plus de cartes
+        AFFICHER "Vous avez gagné !"
+    SINON
+        AFFICHER "Le bot a gagné !"
+    FIN SI
+
+FIN PROGRAMME
