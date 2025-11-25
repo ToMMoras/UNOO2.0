@@ -11,36 +11,33 @@
 
 void initialiser_partie(Partie* p, int nb_joueurs)
 {
-    // Limite le nombre de joueurs entre 2 et 4
     if (nb_joueurs < 2) nb_joueurs = 2;
     if (nb_joueurs > 4) nb_joueurs = 4;
 
-    init_aleatoire(); // initialise le générateur de nombres aléatoires
+    init_aleatoire();
 
-    initialiser_paquet(&p->pioche); // crée le paquet complet
-    melanger_paquet(&p->pioche);    // mélange le paquet
+    initialiser_paquet(&p->pioche);
+    melanger_paquet(&p->pioche);
 
-    p->defausse.nb_cartes = 0; // défausse vide au départ
+    p->defausse.nb_cartes = 0;
 
     p->nb_joueurs = nb_joueurs;
-    p->joueur_actuel = 0; // le joueur 0 commence
-    p->sens = 1;           // sens du jeu : 1 = normal, -1 = inversé
+    p->joueur_actuel = 0;
+    p->sens = 1;
 
-    // Initialisation des joueurs
     for (int i = 0; i < p->nb_joueurs; i++) {
         p->joueurs[i].nb_cartes = 0;
         p->joueurs[i].estHumain = 0;
         p->joueurs[i].nom[0] = '\0';
     }
 
-    // Première carte sur la table (début de la défausse)
+    // Première carte sur la table
     p->carte_dessus = tirer_carte(&p->pioche);
     p->defausse.cartes[p->defausse.nb_cartes++] = p->carte_dessus;
 }
 
 void distribuer_cartes(Partie* p, int cartes_par_joueur)
 {
-    // Distribue "cartes_par_joueur" cartes à chaque joueur
     for (int r = 0; r < cartes_par_joueur; r++) {
         for (int i = 0; i < p->nb_joueurs; i++) {
             Carte c = tirer_carte(&p->pioche);
@@ -51,7 +48,6 @@ void distribuer_cartes(Partie* p, int cartes_par_joueur)
 
 int partie_terminee(Partie* p)
 {
-    // La partie est terminée si un joueur n'a plus de cartes
     for (int i = 0; i < p->nb_joueurs; i++) {
         if (main_vide(&p->joueurs[i])) return 1;
     }
@@ -60,7 +56,6 @@ int partie_terminee(Partie* p)
 
 int joueur_suivant(Partie* p)
 {
-    // Calcule l'index du joueur suivant selon le sens du jeu
     int next = p->joueur_actuel + p->sens;
     if (next < 0) next += p->nb_joueurs;
     if (next >= p->nb_joueurs) next -= p->nb_joueurs;
@@ -69,22 +64,20 @@ int joueur_suivant(Partie* p)
 
 void passer_au_suivant(Partie* p)
 {
-    p->joueur_actuel = joueur_suivant(p); // met à jour le joueur actuel
+    p->joueur_actuel = joueur_suivant(p);
 }
 
 void afficher_plateau(const Partie* p)
 {
     printf("\n Plateau \n");
     printf("Carte dessus : ");
-    afficher_carte(p->carte_dessus); // affiche la carte du dessus
+    afficher_carte(p->carte_dessus);
     printf("Pioche: %d cartes | Défausse: %d cartes\n", p->pioche.nb_cartes, p->defausse.nb_cartes);
-
-    // Affiche le nombre de cartes de chaque joueur
     for (int i = 0; i < p->nb_joueurs; i++) {
         printf("%s - %d cartes%s\n", p->joueurs[i].nom[0] ? p->joueurs[i].nom : "Joueur", p->joueurs[i].nb_cartes,
             p->joueurs[i].estHumain ? " (humain)" : "");
         if (p->joueurs[i].estHumain) {
-            afficher_main(&p->joueurs[i]); // affiche la main du joueur humain
+            afficher_main(&p->joueurs[i]);
         }
     }
     printf("Joueur actuel : %s\n", p->joueurs[p->joueur_actuel].nom);
@@ -93,51 +86,44 @@ void afficher_plateau(const Partie* p)
 
 void boucle_jeu(Partie* p)
 {
-    while (!partie_terminee(p)) { // boucle jusqu'à ce qu'un joueur ait fini
+    while (!partie_terminee(p)) {
         afficher_plateau(p);
 
-        Joueur* j = &p->joueurs[p->joueur_actuel]; // joueur courant
-        int choix = choisir_carte(j, p->carte_dessus); // humain ou bot
+        Joueur* j = &p->joueurs[p->joueur_actuel];
+
+        int choix = choisir_carte(j, p->carte_dessus);
 
         if (choix == -1) {
-            // Le joueur pioche
             Carte c = tirer_carte(&p->pioche);
             ajouter_carte_main(j, c);
             printf("%s a pioché une carte.\n", j->nom);
             passer_au_suivant(p);
-        }
-        else {
-            // Vérifie que la carte jouée est valide
+        } else {
             if (choix < 0 || choix >= j->nb_cartes || !carte_peut_etre_jouee(j->main[choix], p->carte_dessus)) {
                 printf("Carte non jouable ou index invalide — vous piochez.\n");
                 Carte c = tirer_carte(&p->pioche);
                 ajouter_carte_main(j, c);
                 passer_au_suivant(p);
-            }
-            else {
-                // Jouer la carte
+            } else {
                 p->carte_dessus = j->main[choix];
                 retirer_carte_main(j, choix);
                 printf("%s a joué : ", j->nom);
                 afficher_carte(p->carte_dessus);
 
-                // Applique l'effet de la carte spéciale (si +2, inversion, etc.)
                 int effet = appliquer_effet(p, p->joueur_actuel, p->carte_dessus);
 
-                // Gestion des règles UNO pour le joueur humain
+                // Gestion UNO conforme au sujet : penalité si "UNO" faux ou oubli
                 if (j->estHumain) {
                     printf("Tapez 'UNO' si approprié (ou appuyez sur entrée) : ");
                     char buffer[10];
                     demander_chaine(buffer, 10);
-
                     if (strcmp(buffer, "UNO") == 0) {
                         if (j->nb_cartes != 1) {
                             printf("Faux UNO ! Vous piochez 2 cartes.\n");
                             ajouter_carte_main(j, tirer_carte(&p->pioche));
                             ajouter_carte_main(j, tirer_carte(&p->pioche));
-                        }
-                    }
-                    else {
+                        } // sinon tout va bien
+                    } else {
                         if (j->nb_cartes == 1) {
                             printf("Vous avez oublié de crier UNO ! Vous piochez 2 cartes.\n");
                             ajouter_carte_main(j, tirer_carte(&p->pioche));
@@ -147,12 +133,11 @@ void boucle_jeu(Partie* p)
                 }
 
                 if (!effet) {
-                    passer_au_suivant(p); // passe au joueur suivant si aucun effet ne change le tour
+                    passer_au_suivant(p);
                 }
             }
         }
 
-        // Affiche le nombre de cartes du bot
         for (int i = 0; i < p->nb_joueurs; i++) {
             if (!p->joueurs[i].estHumain) {
                 printf("%s a %d cartes.\n", p->joueurs[i].nom, p->joueurs[i].nb_cartes);
@@ -160,8 +145,8 @@ void boucle_jeu(Partie* p)
         }
 
         printf("Appuyez sur entrée pour continuer...\n");
-        getchar(); // pause pour que le joueur puisse lire le plateau
+        getchar();
     }
 
-    printf("Partie terminée !\n"); // fin du jeu
+    printf("Partie terminée !\n");
 }

@@ -1,33 +1,26 @@
 #pragma once
 
-// =============================================================
-// Module : carte
-// Gestion des cartes UNO
-// =============================================================
-
+// Couleurs possibles des cartes
 typedef enum {
     ROUGE,
     JAUNE,
     BLEU,
     VERT,
-    NOIR
+    NOIR   // pour les jokers et +4
 } Couleur;
 
+// Types de cartes possibles
 typedef enum {
-    TYPE_NORMAL,
-    TYPE_PLUS2,
-    TYPE_PLUS4,
-    TYPE_JOKER,
-    TYPE_INVERSION,
-    TYPE_PASSER
+    TYPE_NORMAL,     // carte normale avec valeur 0-9
+    TYPE_PLUS2,      // carte +2
+    TYPE_PLUS4,      // carte +4
+    TYPE_JOKER,      // carte joker
+    TYPE_INVERSION,  // carte inversion de sens
+    TYPE_PASSER      // carte passer le tour
 } TypeCarte;
 
+// Structure représentant une carte
 typedef struct {
-    TypeCarte type;
-    Couleur couleur;
-    int valeur;    
-} Carte;
-
-void afficher_carte(Carte c);
-
-int carte_peut_etre_jouee(Carte c, Carte dessus);
+    TypeCarte type;   // type de la carte
+    Couleur couleur;  // couleur de la carte
+    int valeur;       // vale

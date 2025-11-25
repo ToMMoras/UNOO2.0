@@ -8,14 +8,12 @@ void initialiser_paquet(Paquet* p) {
     int idx = 0;
     Couleur couleurs[] = { ROUGE, JAUNE, BLEU, VERT };
 
-    // Création des cartes normales et 2 cartes de 1 à 9 pour chaque couleur
     for (int c = 0; c < 4; c++) {
-        p->cartes[idx++] = (Carte){ TYPE_NORMAL, couleurs[c], 0 }; // un 0 par couleur
+        p->cartes[idx++] = (Carte){ TYPE_NORMAL, couleurs[c], 0 };
         for (int v = 1; v <= 9; v++) {
             p->cartes[idx++] = (Carte){ TYPE_NORMAL, couleurs[c], v };
             p->cartes[idx++] = (Carte){ TYPE_NORMAL, couleurs[c], v };
         }
-        // Cartes spéciales : +2, inversion, passer (2 de chaque par couleur)
         for (int e = 0; e < 2; e++) {
             p->cartes[idx++] = (Carte){ TYPE_PLUS2, couleurs[c], -1 };
             p->cartes[idx++] = (Carte){ TYPE_INVERSION, couleurs[c], -1 };
@@ -23,20 +21,17 @@ void initialiser_paquet(Paquet* p) {
         }
     }
 
-    // Cartes joker et +4 (4 exemplaires de chaque)
     for (int i = 0; i < 4; i++) {
         p->cartes[idx++] = (Carte){ TYPE_JOKER, NOIR, -1 };
         p->cartes[idx++] = (Carte){ TYPE_PLUS4, NOIR, -1 };
     }
 
-    // Mise à jour du nombre total de cartes dans le paquet
     p->nb_cartes = idx;
 }
 
 void melanger_paquet(Paquet* p) {
-    // Mélange aléatoire des cartes en échangeant chaque carte avec une autre
     for (int i = 0; i < p->nb_cartes; i++) {
-        int j = nombre_aleatoire(0, p->nb_cartes - 1); // index aléatoire
+        int j = nombre_aleatoire(0, p->nb_cartes - 1);
         Carte tmp = p->cartes[i];
         p->cartes[i] = p->cartes[j];
         p->cartes[j] = tmp;
@@ -44,13 +39,10 @@ void melanger_paquet(Paquet* p) {
 }
 
 Carte tirer_carte(Paquet* p) {
-    // Si le paquet est vide, retourne une carte "vide" (sécurisé)
     if (p->nb_cartes <= 0) {
         Carte vide = { TYPE_NORMAL, NOIR, -1 };
         return vide;
     }
-
-    // Retourne la dernière carte du paquet et décrémente le nombre de cartes
     p->nb_cartes--;
     return p->cartes[p->nb_cartes];
 }

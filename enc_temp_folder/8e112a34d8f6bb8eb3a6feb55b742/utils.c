@@ -5,22 +5,17 @@
 #include "utils.h"
 
 void init_aleatoire(void) {
-    // Initialise le générateur de nombres aléatoires avec le temps actuel
     srand((unsigned int)time(NULL));
 }
 
 int nombre_aleatoire(int min, int max) {
-    // Si min et max sont égaux, on retourne directement cette valeur
     if (min == max) return min;
-
-    // On échange min et max si l'utilisateur les a inversés
     if (min > max) {
         int tmp = min;
         min = max;
         max = tmp;
     }
 
-    // Calcul de la plage [min, max] et génération d'un nombre aléatoire dedans
     unsigned int range = (unsigned int)(max - min) + 1u;
     return (int)((unsigned int)rand() % range) + min;
 }
